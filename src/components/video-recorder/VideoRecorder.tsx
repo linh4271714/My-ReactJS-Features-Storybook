@@ -177,13 +177,13 @@ const VideoRecorder = ({
   }, [maxTime, recordTime, stopRecording]);
 
   return (
-    <Stack gap="0.8rem">
+    <Stack gap="8px">
       <Stack p="2rem 0">
         <video
           id="videoRecordedPreview"
           style={{
-            height: "27rem",
-            borderRadius: "2.4rem",
+            height: "270px",
+            borderRadius: "24px",
             display: recordingStep === "recorded" ? "flex" : "none",
           }}
           controls
@@ -193,8 +193,8 @@ const VideoRecorder = ({
           autoPlay
           muted
           style={{
-            height: "27rem",
-            borderRadius: "2.4rem",
+            height: "270px",
+            borderRadius: "24px",
             display: recordingStep !== "recorded" ? "flex" : "none",
           }}
         />
@@ -206,7 +206,8 @@ const VideoRecorder = ({
             recordingStep === "recording" ? red200Color : red900Color,
           color: recordingStep === "recording" ? red900Color : "white",
           width: "100%",
-          gap: "0.8rem",
+          gap: "8px",
+          textTransform: "capitalize",
         }}
         onClick={handleRecordClick}
       >
@@ -216,10 +217,10 @@ const VideoRecorder = ({
           <RadioButtonCheckedOutlinedIcon fontSize="large" />
         )}
         {recordingStep === "ready"
-          ? "녹화 시작"
+          ? "Start recording"
           : recordingStep === "recording"
-          ? "녹화 완료"
-          : "다시 녹화"}
+          ? "End recording"
+          : "Record again"}
       </EliceButton>
     </Stack>
   );

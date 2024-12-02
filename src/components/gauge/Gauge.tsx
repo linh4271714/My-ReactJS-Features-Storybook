@@ -2,6 +2,8 @@ import { Box } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 
 interface IProps {
+  gaugeWidth?: number;
+  needleHeight?: number;
   targetValue?: number;
   fillColor?: string;
   fillShadowColor?: string;
@@ -9,6 +11,8 @@ interface IProps {
 }
 
 const Gauge = ({
+  gaugeWidth = window.innerWidth <= 480 ? 9 : 18,
+  needleHeight = window.innerWidth <= 480 ? 20 : 40,
   targetValue = 75,
   fillColor = "#F7931E",
   fillShadowColor = "#DF9900",
@@ -58,11 +62,9 @@ const Gauge = ({
       );
       const pad = 15;
       const r = (W - 2 * pad) / 2;
-      const gaugeWidth = window.innerWidth <= 480 ? 9 : 18;
       const borderWidth = 2;
       const r2 = r - gaugeWidth;
       const rBorder = r - borderWidth;
-      const needleHeight = window.innerWidth <= 480 ? 20 : 40;
       const needleAngle = 3.5;
 
       const ZeroMark = {
@@ -215,10 +217,10 @@ const Gauge = ({
     detectAndDrawGauge();
     window.addEventListener("resize", detectAndDrawGauge);
     return () => window.removeEventListener("resize", detectAndDrawGauge);
-  }, [value]);
+  }, [value, gaugeWidth, needleHeight]);
 
   return (
-    <Box position="relative" width="full" pt="100%" gap={0}>
+    <Box position="relative" width="100%" maxWidth={500} pt="100%" gap={0}>
       <svg
         className="gauge"
         height="full"

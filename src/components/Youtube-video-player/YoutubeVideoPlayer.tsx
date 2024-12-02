@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
-import { Backdrop, Stack } from '@mui/material';
+import { useEffect, useState } from "react";
+import { Backdrop, Stack } from "@mui/material";
 
-import { gray100Color, gray200Color } from '../tokenColorTemporary';
+import { gray100Color, gray200Color } from "../tokenColorTemporary";
 
 export enum YTPlayerState {
   BUFFERING = 3,
@@ -74,10 +74,10 @@ const YoutubeVideoPlayer = ({
 
   useEffect(() => {
     if (!window.isYouTubeIframeAPIReady) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
 
-      const firstScriptTag = document.getElementsByTagName('script')[0];
+      const firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
 
       window.onYouTubeIframeAPIReady = () => {
@@ -94,16 +94,16 @@ const YoutubeVideoPlayer = ({
       <Stack
         width="100%"
         height="100%"
-        borderRadius="2.4rem"
+        borderRadius="24px"
         overflow="hidden"
-        p="1rem"
+        p="10px"
         bgcolor={gray100Color}
         border={`1px solid ${gray200Color}`}
         sx={{
           iframe: {
-            height: '100%',
-            width: '100%',
-            borderRadius: '2rem',
+            height: "100%",
+            width: "100%",
+            borderRadius: "2rem",
           },
         }}
         onClick={() => setShowingFullsize(true)}
@@ -111,7 +111,7 @@ const YoutubeVideoPlayer = ({
         <Stack id={`youtube-player-${id}`} />
       </Stack>
       <Backdrop
-        sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={showingFullsize}
         onClick={() => {
           setShowingFullsize(false);
@@ -123,10 +123,10 @@ const YoutubeVideoPlayer = ({
           width="95vw"
           sx={{
             iframe: {
-              pointerEvents: 'auto',
-              height: '100%',
-              width: '100%',
-              borderRadius: '2rem',
+              pointerEvents: "auto",
+              height: "100%",
+              width: "100%",
+              borderRadius: "2rem",
             },
           }}
         >

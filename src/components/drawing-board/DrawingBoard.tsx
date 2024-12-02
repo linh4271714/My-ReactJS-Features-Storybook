@@ -106,7 +106,7 @@ const DrawingBoard = () => {
   }, []);
 
   return (
-    <Stack direction="column-reverse" gap="1rem">
+    <Stack direction="column-reverse" gap="10px">
       <CanvasPalette
         onReset={resetCanvas}
         onRedo={redo}
@@ -122,7 +122,7 @@ const DrawingBoard = () => {
       />
       <Stack
         direction="row"
-        borderRadius="1rem"
+        borderRadius="10px"
         border={`1px solid red`}
         id="pen-mode-area"
       >

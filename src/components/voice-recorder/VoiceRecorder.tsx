@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import PauseOutlinedIcon from '@mui/icons-material/PauseOutlined';
-import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
-import RadioButtonCheckedOutlinedIcon from '@mui/icons-material/RadioButtonCheckedOutlined';
-import StopCircleOutlinedIcon from '@mui/icons-material/StopCircleOutlined';
-import { Box, Button, LinearProgress, Stack } from '@mui/material';
-import { v4 } from 'uuid';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import PauseOutlinedIcon from "@mui/icons-material/PauseOutlined";
+import PlayArrowOutlinedIcon from "@mui/icons-material/PlayArrowOutlined";
+import RadioButtonCheckedOutlinedIcon from "@mui/icons-material/RadioButtonCheckedOutlined";
+import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
+import { Box, Button, LinearProgress, Stack } from "@mui/material";
+import { v4 } from "uuid";
 
-import { EliceButton } from '../button';
+import { EliceButton } from "../button";
 import {
   gray200Color,
   main200Color,
   main300Color,
   red200Color,
   red900Color,
-} from '../tokenColorTemporary';
+} from "../tokenColorTemporary";
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 export interface EliceVoiceRecorderProps {
   onSubmit: (audioBlob: Blob) => void;
@@ -27,7 +27,7 @@ export interface EliceVoiceRecorderProps {
   guide?: Partial<Record<RecordingStepType, ReactNode>>;
 }
 
-type RecordingStepType = 'ready' | 'recording' | 'recorded';
+type RecordingStepType = "ready" | "recording" | "recorded";
 
 const VoiceRecorder = ({
   disabled = false,
@@ -38,7 +38,7 @@ const VoiceRecorder = ({
   guide,
 }: EliceVoiceRecorderProps) => {
   const [recordingStep, setRecordingStep] =
-    useState<RecordingStepType>('ready');
+    useState<RecordingStepType>("ready");
 
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [wasInit, setWasInit] = useState(false);
@@ -62,7 +62,7 @@ const VoiceRecorder = ({
   }, []);
 
   const startRecording = async () => {
-    setRecordingStep('recording');
+    setRecordingStep("recording");
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
@@ -75,7 +75,7 @@ const VoiceRecorder = ({
       setRecordTime(0);
 
       const timer = setInterval(() => {
-        setRecordTime(prev => prev + 1);
+        setRecordTime((prev) => prev + 1);
       }, 1000);
 
       //Volume analysis
@@ -96,25 +96,25 @@ const VoiceRecorder = ({
         setCurrentVolume(averageVolume);
       }, 100);
 
-      mediaRecorderRef.current.addEventListener('dataavailable', event => {
+      mediaRecorderRef.current.addEventListener("dataavailable", (event) => {
         if (event.data.size > 0) {
           chunks.push(event.data);
         }
       });
 
-      mediaRecorderRef.current.addEventListener('stop', () => {
+      mediaRecorderRef.current.addEventListener("stop", () => {
         const tracks = mediaRecorderRef.current?.stream.getTracks();
-        tracks?.forEach(track => track.stop());
+        tracks?.forEach((track) => track.stop());
         clearInterval(timer);
         clearInterval(volumeCheck);
 
         const audioFile = new File(chunks, `chat-recording-${v4()}`, {
-          type: 'audio/wav',
+          type: "audio/wav",
         });
 
         setAudioBlob(
           chunks.reduce(
-            (acc, cur) => new Blob([acc, cur], { type: 'audio/wav' })
+            (acc, cur) => new Blob([acc, cur], { type: "audio/wav" })
           )
         );
 
@@ -124,12 +124,12 @@ const VoiceRecorder = ({
         const audioContext = new AudioContext();
         const audioReader = new FileReader();
 
-        audioReader.onload = async event => {
+        audioReader.onload = async (event) => {
           const arrayBuffer = event.target?.result;
 
           await audioContext.decodeAudioData(
             arrayBuffer as ArrayBuffer,
-            audioBuffer => {
+            (audioBuffer) => {
               const durationInSeconds = audioBuffer.duration;
               setDuration(durationInSeconds);
             }
@@ -141,7 +141,7 @@ const VoiceRecorder = ({
 
       mediaRecorderRef.current.start();
     } catch (error) {
-      setRecordingStep('ready');
+      setRecordingStep("ready");
       console.error({ startRecordingError: error });
     }
   };
@@ -149,11 +149,11 @@ const VoiceRecorder = ({
   const stopRecording = useCallback(async () => {
     if (
       mediaRecorderRef.current &&
-      mediaRecorderRef.current.state === 'recording'
+      mediaRecorderRef.current.state === "recording"
     ) {
       mediaRecorderRef.current.stop();
     }
-    setRecordingStep('recorded');
+    setRecordingStep("recorded");
     stopPlaying();
   }, []);
 
@@ -164,7 +164,7 @@ const VoiceRecorder = ({
       await audioRef.current?.play();
     }
 
-    setPlaying(prev => !prev);
+    setPlaying((prev) => !prev);
   };
 
   const handleRecordClick = async () => {
@@ -173,18 +173,18 @@ const VoiceRecorder = ({
     }
 
     switch (recordingStep) {
-      case 'ready':
+      case "ready":
         void startRecording();
         break;
 
-      case 'recording':
+      case "recording":
         if (recordTime < 1) {
           return;
         }
         await stopRecording();
         break;
 
-      case 'recorded':
+      case "recorded":
         setAudioBlob(null);
         void startRecording();
         break;
@@ -192,7 +192,7 @@ const VoiceRecorder = ({
   };
 
   useEffect(() => {
-    if (recordingStep === 'recorded' && audioBlob) {
+    if (recordingStep === "recorded" && audioBlob) {
       onSubmit(audioBlob);
     }
   }, [audioBlob, recordingStep]);
@@ -200,18 +200,18 @@ const VoiceRecorder = ({
   useEffect(() => {
     if (initVoice && !wasInit) {
       audioRef.current = new Audio(
-        typeof initVoice === 'string'
+        typeof initVoice === "string"
           ? initVoice
           : URL.createObjectURL(initVoice)
       );
-      setRecordingStep('recorded');
+      setRecordingStep("recorded");
       setWasInit(true);
     }
   }, [wasInit, initVoice]);
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.addEventListener('durationchange', () => {
+      audioRef.current.addEventListener("durationchange", () => {
         if (audioRef.current?.duration !== Infinity) {
           setDuration(audioRef.current?.duration ?? 0);
         }
@@ -253,20 +253,20 @@ const VoiceRecorder = ({
   }, [audioRef, duration, isPlaying, stopPlaying]);
 
   return (
-    <Stack gap="0.8rem">
-      {recordingStep === 'recorded' ? (
+    <Stack gap="8px">
+      {recordingStep === "recorded" ? (
         <>
           {guide?.recorded}
-          <Stack direction="row" alignItems="center" gap="4rem" p="2rem 0">
+          <Stack direction="row" alignItems="center" gap="40px" p="2rem 0">
             <Button
               onClick={handlePlayClick}
               style={{
-                height: '4rem',
-                width: '4rem',
+                height: "40px",
+                width: "40px",
                 backgroundColor: main300Color,
-                boxShadow: '0.74px 0.74px 4.89px 0px #ECE9F0 inset',
-                color: 'white',
-                minWidth: 'unset',
+                boxShadow: "0.74px 0.74px 4.89px 0px #ECE9F0 inset",
+                color: "white",
+                minWidth: "unset",
               }}
             >
               {isPlaying ? (
@@ -281,18 +281,18 @@ const VoiceRecorder = ({
                 variant="determinate"
                 value={progress}
                 sx={{
-                  '.MuiLinearProgress-bar': {
-                    transition: 'none',
+                  ".MuiLinearProgress-bar": {
+                    transition: "none",
                     backgroundColor: main200Color,
                   },
-                  height: '0.8rem',
+                  height: "8px",
                   backgroundColor: gray200Color,
                 }}
               />
             </Box>
           </Stack>
         </>
-      ) : guide?.ready && recordingStep === 'ready' ? (
+      ) : guide?.ready && recordingStep === "ready" ? (
         guide.ready
       ) : (
         <>
@@ -301,17 +301,17 @@ const VoiceRecorder = ({
             direction="row"
             justifyContent="center"
             alignItems="center"
-            gap="1.1rem"
-            p="2rem 2.4rem"
+            gap="10px"
+            p="2rem 2.40px"
           >
             {Array(20)
               .fill(0)
               .map((_, idx) => (
                 <Box
                   key={`volume-${idx}`}
-                  width="1.1rem"
-                  height="3.4rem"
-                  borderRadius="1.1rem"
+                  width="10px"
+                  height="3.40px"
+                  borderRadius="10px"
                   sx={{
                     backgroundColor:
                       currentVolume / 5 >= idx ? main200Color : gray200Color,
@@ -325,23 +325,24 @@ const VoiceRecorder = ({
         disabled={disabled}
         style={{
           backgroundColor:
-            recordingStep === 'recording' ? red200Color : red900Color,
-          color: recordingStep === 'recording' ? red900Color : 'white',
-          width: '100%',
-          gap: '0.8rem',
+            recordingStep === "recording" ? red200Color : red900Color,
+          color: recordingStep === "recording" ? red900Color : "white",
+          width: "100%",
+          gap: "8px",
+          textTransform: "capitalize",
         }}
         onClick={handleRecordClick}
       >
-        {recordingStep === 'recording' ? (
+        {recordingStep === "recording" ? (
           <StopCircleOutlinedIcon fontSize="large" />
         ) : (
           <RadioButtonCheckedOutlinedIcon fontSize="large" />
         )}
-        {recordingStep === 'ready'
-          ? '녹음 시작'
-          : recordingStep === 'recording'
-          ? '녹음 완료'
-          : '다시 녹음'}
+        {recordingStep === "ready"
+          ? "Start recording"
+          : recordingStep === "recording"
+          ? "End recording"
+          : "Record again"}
       </EliceButton>
     </Stack>
   );

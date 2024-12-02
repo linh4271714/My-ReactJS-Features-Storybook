@@ -92,7 +92,7 @@ const CanvasPalette: React.FC<CanvasPaletteProps> = ({
         direction={direction}
         width={direction.includes("row") ? "fit-content" : "40px"}
         height={direction.includes("column") ? "fit-content" : "40px"}
-        gap="0.25rem"
+        gap="2.5px"
         divider={
           <Divider
             orientation={direction === "row" ? "vertical" : "horizontal"}
