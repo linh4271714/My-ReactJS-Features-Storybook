@@ -1,5 +1,5 @@
 {
-  "homepage": "http://linh4271714.github.io/My-ReactJS-Legacy",
+  "homepage": "http://linh4271714.github.io/My-ReactJS-Features-Storybook",
   "name": "my-legacy",
   "version": "0.1.0",
   "private": true,
@@ -25,7 +25,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "storybook dev -p 6006",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
