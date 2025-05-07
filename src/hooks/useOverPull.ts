@@ -10,7 +10,7 @@ const useOverPull = ({ pullDownCallback, pullUpCallback }: IProps) => {
     var pStart = { x: 0, y: 0 };
     var pStop = { x: 0, y: 0 };
 
-    const swipeStart = (e: TouchEvent) => {
+    const swipeStart = (e: TouchEvent | any) => {
       if (typeof e["targetTouches"] !== "undefined") {
         var touch = e.targetTouches[0];
         pStart.x = touch.screenX;
@@ -21,7 +21,7 @@ const useOverPull = ({ pullDownCallback, pullUpCallback }: IProps) => {
       }
     };
 
-    const swipeEnd = (e: TouchEvent) => {
+    const swipeEnd = (e: TouchEvent | any) => {
       if (typeof e["changedTouches"] !== "undefined") {
         var touch = e.changedTouches[0];
         pStop.x = touch.screenX;
